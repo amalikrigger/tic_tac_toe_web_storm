@@ -2,9 +2,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const gameBoard = document.querySelector('.game-board');
     const message = document.querySelector('.message');
+    const validMovesCount = document.querySelector('.validMovesCount');
+
 
     let currentPlayer = 'X';
-    const gridSize = 6; // Modify this value for different grid sizes
+    const gridSize = 3; // Modify this value for different grid sizes
     let board = Array.from({ length: gridSize }, () => Array.from({ length: gridSize }, () => null));
 
     for (let row = 0; row < gridSize; row++) {
@@ -30,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const handleClick = (row, col) => {
-        if (board[row][col] === null) { // Check if the cell is empty
+        if (isValidMove(row, col)) { // Check if the cell is empty
             board[row][col] = currentPlayer; // Update the board state with current player's symbol
 
             const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
@@ -38,12 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (checkWinner(row, col)) {
                 message.textContent = `${currentPlayer} wins!`;
+                validMovesCount.textContent = '';
                 disableClicks(); // Disable further clicks
             } else if (checkDraw()) {
                 message.textContent = "It's a draw!";
+                validMovesCount.textContent = 'No more valid moves';
                 disableClicks(); // Disable further clicks
             } else {
-                currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch players
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; //
+                validMovesCount.textContent = `${countValidMoves()} valid moves left`;
                 message.textContent = `Next turn: ${currentPlayer}`;
             }
         } else {
@@ -88,7 +93,42 @@ document.addEventListener('DOMContentLoaded', () => {
         gameBoard.removeEventListener('click', handleClick);
     };
 
+    const countValidMoves = () => {
+        if (!board || board.length === 0) return 0;
+
+        let validMoves = 0;
+
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                if (isValidMove(row, col)) {
+                    validMoves++;
+                }
+            }
+        }
+
+        return validMoves;
+    };
+
+    const isValidMove = (row, col) => {
+        return board[row][col] === null;
+    };
+
+    console.log(computeSum([1, 2, 3], [3, 4, 5]));
+
 })
+
+const computeSum = (arr1, arr2) => {
+    if (!arr1 || !arr2 || arr1.length !== arr2.length) return null;
+
+    const sumArray = [];
+    const length = arr1.length;
+
+    for (let i = 0; i < length; i++) {
+        sumArray.push(arr1[i] + arr2[i]);
+    }
+
+    return sumArray;
+};
 
 
 // document.addEventListener('DOMContentLoaded', () => {
