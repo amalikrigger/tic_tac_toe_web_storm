@@ -42,34 +42,83 @@ h1 {
 
 .top {
     border-top: none;
+    -webkit-border-top: none; /* Safari and Chrome */
+    -moz-border-top: none; /* Firefox */
+    -ms-border-top: none; /* IE */
+    -o-border-top: none; /* Opera */
 }
 
 .bottom {
     border-bottom: none;
+    -webkit-border-bottom: none; /* Safari and Chrome */
+    -moz-border-bottom: none; /* Firefox */
+    -ms-border-bottom: none; /* IE */
+    -o-border-bottom: none; /* Opera */
 }
 
 .right {
     border-right: none;
+    -webkit-border-right: none; /* Safari and Chrome */
+    -moz-border-right: none; /* Firefox */
+    -ms-border-right: none; /* IE */
+    -o-border-right: none; /* Opera */
 }
 
 .top.left {
     border-top: none;
+    -webkit-border-top: none; /* Safari and Chrome */
+    -moz-border-top: none; /* Firefox */
+    -ms-border-top: none; /* IE */
+    -o-border-top: none; /* Opera */
+
     border-left: none;
+    -webkit-border-left: none; /* Safari and Chrome */
+    -moz-border-left: none; /* Firefox */
+    -ms-border-left: none; /* IE */
+    -o-border-left: none; /* Opera */
 }
 
 .top.right {
     border-top: none;
+    -webkit-border-top: none; /* Safari and Chrome */
+    -moz-border-top: none; /* Firefox */
+    -ms-border-top: none; /* IE */
+    -o-border-top: none; /* Opera */
+
     border-right: none;
+    -webkit-border-right: none; /* Safari and Chrome */
+    -moz-border-right: none; /* Firefox */
+    -ms-border-right: none; /* IE */
+    -o-border-right: none; /* Opera */
+
 }
 
 .bottom.left {
     border-bottom: none;
+    -webkit-border-bottom: none; /* Safari and Chrome */
+    -moz-border-bottom: none; /* Firefox */
+    -ms-border-bottom: none; /* IE */
+    -o-border-bottom: none; /* Opera */
+
     border-left: none;
+    -webkit-border-left: none; /* Safari and Chrome */
+    -moz-border-left: none; /* Firefox */
+    -ms-border-left: none; /* IE */
+    -o-border-left: none; /* Opera */
 }
 
 .bottom.right {
     border-bottom: none;
+    -webkit-border-bottom: none; /* Safari and Chrome */
+    -moz-border-bottom: none; /* Firefox */
+    -ms-border-bottom: none; /* IE */
+    -o-border-bottom: none; /* Opera */
+
     border-right: none;
+    -webkit-border-right: none; /* Safari and Chrome */
+    -moz-border-right: none; /* Firefox */
+    -ms-border-right: none; /* IE */
+    -o-border-right: none; /* Opera */
 }
 
 .message {

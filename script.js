@@ -1,63 +1,150 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const gameBoard = document.querySelector('.game-board');
-    const cells = document.querySelectorAll('.cell');
     const message = document.querySelector('.message');
 
     let currentPlayer = 'X';
+    const gridSize = 6; // Modify this value for different grid sizes
+    let board = Array.from({ length: gridSize }, () => Array.from({ length: gridSize }, () => null));
 
-    let board = [
-        [null, null, null],
-        [null, null, null],
-        [null, null, null]
-    ];
+    for (let row = 0; row < gridSize; row++) {
+        const rowElement = document.createElement('div');
+        rowElement.classList.add('row');
+        for (let col = 0; col < gridSize; col++) {
+            const cellElement = document.createElement('div');
+            cellElement.classList.add('cell');
+            cellElement.dataset.row = row.toString();
+            cellElement.dataset.col = col.toString();
+            rowElement.appendChild(cellElement);
+        }
+        gameBoard.appendChild(rowElement);
+    }
 
-    const checkWinner = () => {
-        for (let row = 0; row < 3; row++) {
-            if (board[row][0] === currentPlayer && board[row][1] === currentPlayer && board[row][2] === currentPlayer) {
+    gameBoard.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target.classList.contains('cell')) {
+            const row = parseInt(target.dataset.row);
+            const col = parseInt(target.dataset.col);
+            handleClick(row, col);
+        }
+    });
+
+    const handleClick = (row, col) => {
+        if (board[row][col] === null) { // Check if the cell is empty
+            board[row][col] = currentPlayer; // Update the board state with current player's symbol
+
+            const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+            cell.textContent = currentPlayer; // Update the cell content with current player's symbol
+
+            if (checkWinner(row, col)) {
+                message.textContent = `${currentPlayer} wins!`;
+                disableClicks(); // Disable further clicks
+            } else if (checkDraw()) {
+                message.textContent = "It's a draw!";
+                disableClicks(); // Disable further clicks
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch players
+                message.textContent = `Next turn: ${currentPlayer}`;
+            }
+        } else {
+            message.textContent = "Invalid move!"; // Cell is already occupied
+        }
+    };
+
+    const checkWinner = (lastRow, lastCol) => {
+        const symbol = board[lastRow][lastCol];
+
+        // Check row
+        if (board[lastRow].every(cell => cell === symbol)) {
+            return true;
+        }
+
+        // Check column
+        if (board.every(row => row[lastCol] === symbol)) {
+            return true;
+        }
+
+        // Check diagonal
+        if (lastRow === lastCol) {
+            if (board.every((row, i) => row[i] === symbol)) {
+                return true;
+            }
+        }
+        if (lastRow + lastCol === gridSize - 1) {
+            if (board.every((row, i) => row[gridSize - 1 - i] === symbol)) {
                 return true;
             }
         }
 
-        for (let col = 0; col < 3; col++) {
-            if (board[0][col] === currentPlayer && board[1][col] === currentPlayer && board[2][col] === currentPlayer) {
-                return true;
-            }
-        }
-
-        return board[0][0] === currentPlayer && board[1][1] === currentPlayer && board[2][2] === currentPlayer || board[0][2] === currentPlayer && board[1][1] === currentPlayer && board[2][0] === currentPlayer;
+        return false;
     };
 
     const checkDraw = () => {
         return board.every(row => row.every(cell => cell !== null));
     };
 
-    const handleClick = (row, col) => {
-        if (board[row][col] === null) {
-            board[row][col] = currentPlayer;
-            cells[row * 3 + col].textContent = currentPlayer;
-            if (checkWinner()) {
-                message.textContent = `${currentPlayer} wins!`;
-                cells.forEach(cell => cell.removeEventListener('click', handleCellClick));
-            } else if (checkDraw()) {
-                message.textContent = "It's a draw!";
-            } else {
-                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                message.textContent = `Next turn: ${currentPlayer}`;
-            }
-        } else {
-            message.textContent = "Invalid move!"
-        }
+    // Function to disable further clicks on the game board
+    const disableClicks = () => {
+        gameBoard.removeEventListener('click', handleClick);
     };
 
-    const handleCellClick = (event) => {
-        const row = parseInt(event.target.getAttribute('data-row'));
-        const col = parseInt(event.target.getAttribute('data-col'));
-        handleClick(row, col);
-    };
-
-    cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 })
+
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     const cells = document.querySelectorAll('.cell');
+//     const message = document.querySelector('.message');
+//
+//     let currentPlayer = 'X';
+//     const gridSize = 3; // Modify this value for different grid sizes
+//     let board = Array.from({ length: gridSize }, () => Array.from({ length: gridSize }, () => null));
+//
+//     const checkWinner = () => {
+//         for (let row = 0; row < 3; row++) {
+//             if (board[row][0] === currentPlayer && board[row][1] === currentPlayer && board[row][2] === currentPlayer) {
+//                 return true;
+//             }
+//         }
+//
+//         for (let col = 0; col < 3; col++) {
+//             if (board[0][col] === currentPlayer && board[1][col] === currentPlayer && board[2][col] === currentPlayer) {
+//                 return true;
+//             }
+//         }
+//
+//         return board[0][0] === currentPlayer && board[1][1] === currentPlayer && board[2][2] === currentPlayer || board[0][2] === currentPlayer && board[1][1] === currentPlayer && board[2][0] === currentPlayer;
+//     };
+//
+//     const checkDraw = () => {
+//         return board.every(row => row.every(cell => cell !== null));
+//     };
+//
+//     const handleClick = (row, col) => {
+//         if (board[row][col] === null) {
+//             board[row][col] = currentPlayer;
+//             cells[row * 3 + col].textContent = currentPlayer;
+//             if (checkWinner()) {
+//                 message.textContent = `${currentPlayer} wins!`;
+//                 cells.forEach(cell => cell.removeEventListener('click', handleCellClick));
+//             } else if (checkDraw()) {
+//                 message.textContent = "It's a draw!";
+//             } else {
+//                 currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+//                 message.textContent = `Next turn: ${currentPlayer}`;
+//             }
+//         } else {
+//             message.textContent = "Invalid move!"
+//         }
+//     };
+//
+//     const handleCellClick = (event) => {
+//         const row = parseInt(event.target.getAttribute('data-row'));
+//         const col = parseInt(event.target.getAttribute('data-col'));
+//         handleClick(row, col);
+//     };
+//
+//     cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+// })
 
 class TicTacToe {
     constructor(size = 3) {
